@@ -46,7 +46,8 @@ public class EmailUtil {
             message.setFrom(new InternetAddress(USERNAME));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(subject);
-            message.setText(content);
+            // 将内容类型设置为HTML
+            message.setContent(content, "text/html; charset=UTF-8");
 
             Transport.send(message);
             System.out.println("邮件发送成功");

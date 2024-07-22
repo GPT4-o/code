@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/SendCodeServlet")
-public class SendCodeServlet extends HttpServlet {
+@WebServlet("/api/sendVerificationCode")
+public class VerificationCodeApiServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("application/json");
 
         String email = request.getParameter("email");
         String code = generateVerificationCode();
@@ -20,17 +20,22 @@ public class SendCodeServlet extends HttpServlet {
 
         try {
             EmailUtil.sendEmail(email, "登录码", htmlContent);
-            request.getSession().setAttribute("verificationCode", code);
-            response.getWriter().write("验证码已发送至邮箱，请查收！");
+            // Assuming a simple JSON response indicating success
+            response.getWriter().write("{\"status\":\"success\",\"message\":\"验证码已发送至邮箱\"}");
         } catch (Exception e) {
             e.printStackTrace();
-            response.getWriter().write("发送邮件失败！");
+            // Assuming a simple JSON response indicating failure
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"发送邮件失败\"}");
         }
+    }
+
+    private String generateVerificationCode() {
+        // 生成6位验证码
+        return String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
     }
 
     private static String getString(String code) {
         String logoPath = "https://ming999.tech/m.jpg";
-
         String htmlContent = "<html>\n" +
                 "<body style=\"font-family: Arial, sans-serif;\">\n" +
                 "<img src=\"" + logoPath + "\" alt=\"您的公司徽标\" style=\"width: 150px; height: auto;\">\n" +
@@ -39,10 +44,5 @@ public class SendCodeServlet extends HttpServlet {
                 "</body>\n" +
                 "</html>";
         return htmlContent;
-    }
-
-    private String generateVerificationCode() {
-        // 生成6位验证码
-        return String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
     }
 }

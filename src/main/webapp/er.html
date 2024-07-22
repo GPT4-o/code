@@ -1,15 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>验证码验证</title>
+    <title>API 访问示例</title>
 </head>
 <body>
-<h2>验证验证码</h2>
-<form action="VerifyCodeServlet" method="post">
-    <label for="code">验证码:</label>
-    <input type="text" id="code" name="code" required>
-    <button type="submit">验证</button>
-</form>
+<label for="authCode">授权码:</label>
+<input type="text" id="authCode" name="authCode" required>
+<br><br>
+<button id="fetchButton">发送请求</button>
+<div id="apiResponse">API 响应将显示在这里</div>
+<script>
+    document.getElementById('fetchButton').addEventListener('click', function (event) {
+        event.preventDefault(); // 阻止默认行为
+        const authCode = document.getElementById('authCode').value;
+        fetch('http://localhost:8080/api/example', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': authCode // 从用户输入中获取授权码
+            },
+            body: JSON.stringify({parameter: "value"}) // 根据需要发送的数据调整
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                document.getElementById('apiResponse').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch((error) => {
+                console.error('错误:', error);
+                document.getElementById('apiResponse').innerText = '错误: ' + error;
+            });
+    });
+</script>
 </body>
 </html>
