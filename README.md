@@ -23,4 +23,4 @@
 微信赞赏码
 
 [//]: # (插入图赞赏码图片)
-![赞赏码](https://73vxvaw6-2j5hce7i-m4rbvfrpk900.c2.mcprev.cn/img/m.jpg "微信赞赏码.png")
+![赞赏码](m.jpg "微信赞赏码.png")
